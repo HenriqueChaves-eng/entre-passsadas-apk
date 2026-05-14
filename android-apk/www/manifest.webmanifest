@@ -1,0 +1,19 @@
+{
+  "name": "Ajuste de Espaçamento Entre-Passadas",
+  "short_name": "Entre-Passadas",
+  "description": "Ajuste Offline de Espaçamento Entre-Passadas da Plantadeira.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f4f5f6",
+  "theme_color": "#f4f5f6",
+  "icons": [
+    {
+      "src": "assets/logo_agres.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

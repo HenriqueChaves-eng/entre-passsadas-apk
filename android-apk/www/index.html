@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#f4f5f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Ajuste Entre-Passadas">
+    <title>Ajuste de Espaçamento Entre-Passadas</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="assets/logo_agres.png">
+    <link rel="icon" href="assets/logo_agres.png">
+    <link rel="stylesheet" href="styles.css?v=agres-product49">
+  </head>
+  <body>
+    <svg aria-hidden="true" class="sprite">
+      <symbol id="icon-reset" viewBox="0 0 24 24">
+        <path d="M4 7v5h5"></path>
+        <path d="M5.2 11a7 7 0 1 0 1.8-6.7L4 7"></path>
+      </symbol>
+      <symbol id="icon-save" viewBox="0 0 24 24">
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path>
+        <path d="M17 21v-8H7v8"></path>
+        <path d="M7 3v5h8"></path>
+      </symbol>
+      <symbol id="icon-copy" viewBox="0 0 24 24">
+        <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+      </symbol>
+      <symbol id="icon-trash" viewBox="0 0 24 24">
+        <path d="M3 6h18"></path>
+        <path d="M8 6V4h8v2"></path>
+        <path d="M19 6l-1 14H6L5 6"></path>
+        <path d="M10 11v5"></path>
+        <path d="M14 11v5"></path>
+      </symbol>
+      <symbol id="icon-download" viewBox="0 0 24 24">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <path d="M7 10l5 5 5-5"></path>
+        <path d="M12 15V3"></path>
+      </symbol>
+    </svg>
+
+    <main class="app-shell">
+      <header class="app-header">
+        <div class="brand">
+          <img src="assets/agres-brand.jpeg" alt="Agres">
+          <div>
+            <p>Plantadeira</p>
+            <h1>Ajuste de Espaçamento Entre-Passadas</h1>
+          </div>
+        </div>
+        <span class="status-pill" id="connectionStatus">Offline Pronto</span>
+      </header>
+
+      <nav class="tabs" aria-label="Visualização">
+        <button class="tab active" type="button" data-view="calculator">Cálculo</button>
+        <button class="tab" type="button" data-view="history">Histórico</button>
+      </nav>
+
+      <section class="view active" id="calculatorView">
+        <div class="workflow-actions" aria-label="Fluxo do cálculo">
+          <button class="secondary-button" type="button" id="newButton">
+            Primeira Passada
+          </button>
+          <button class="primary-button next-stage-button" type="button" id="secondStageButton">
+            Segunda Passada
+          </button>
+        </div>
+
+        <div class="calculator-layout">
+          <section class="card form-card" aria-labelledby="inputsTitle">
+            <div class="card-heading">
+              <p>Entradas</p>
+              <h2 id="inputsTitle">Medidas em Metros</h2>
+            </div>
+
+            <div class="form-block">
+              <h3>Valores Iniciais</h3>
+
+              <label class="field">
+                <span>Espaçamento Entre Linhas da Plantadeira</span>
+                <div class="input-shell">
+                  <input id="inputSpacing" inputmode="decimal" enterkeyhint="done" autocomplete="off" aria-label="Espaçamento Entre Linhas da Plantadeira">
+                  <em>m</em>
+                </div>
+              </label>
+
+              <label class="field">
+                <span>Quantidade de Linhas</span>
+                <div class="input-shell">
+                  <input id="inputRows" inputmode="numeric" enterkeyhint="done" autocomplete="off" aria-label="Quantidade de Linhas">
+                  <em>linhas</em>
+                </div>
+              </label>
+
+              <div class="field">
+                <span>Largura do Implemento Calculada</span>
+                <div class="calculated-shell">
+                  <strong id="resultImplementWidth">0,000 m</strong>
+                </div>
+              </div>
+
+              <label class="field">
+                <span>Deslocamento Lateral do Implemento</span>
+                <div class="input-shell">
+                  <input id="inputInitialOffset" inputmode="decimal" enterkeyhint="done" autocomplete="off" aria-label="Deslocamento Lateral do Implemento">
+                  <em>m</em>
+                </div>
+              </label>
+            </div>
+
+            <div class="form-block">
+              <h3>Medições no Campo</h3>
+
+              <div class="field">
+                <span>Virada Entre a 1ª e a 2ª Passada</span>
+                <div class="choice" role="radiogroup" aria-label="Virada Entre a Primeira e a Segunda Passada">
+                  <button type="button" role="radio" aria-checked="true" data-turn="left">Esquerda</button>
+                  <button type="button" role="radio" aria-checked="false" data-turn="right">Direita</button>
+                </div>
+              </div>
+
+              <div class="field-guide turn-left" id="fieldGuide" aria-label="Vista Superior das Passadas no Campo">
+                <div class="guide-title">
+                  <strong>Vista Superior do Campo</strong>
+                </div>
+
+                <div class="top-field">
+                  <svg class="field-map" viewBox="0 0 720 310" role="img" aria-labelledby="fieldMapTitle">
+                    <title id="fieldMapTitle">Vista Superior das Passadas com Trator e Plantadeira</title>
+                    <defs>
+                      <marker id="turnArrow" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                        <path d="M 0 0 L 10 5 L 0 10 z"></path>
+                      </marker>
+                    </defs>
+
+                    <rect class="map-soil" x="10" y="10" width="700" height="290" rx="18"></rect>
+
+                    <g class="field-lane lane-a pass-three" id="laneA">
+                      <line class="guide-line" x1="136" y1="72" x2="136" y2="224"></line>
+                      <path class="travel-arrow arrow-up" d="M 136 194 L 136 126 M 122 140 L 136 126 L 150 140"></path>
+                      <path class="travel-arrow arrow-down" d="M 136 126 L 136 194 M 122 180 L 136 194 L 150 180"></path>
+                      <circle class="lane-chip" cx="136" cy="56" r="26"></circle>
+                      <text class="lane-number" id="laneALabel" x="136" y="64">3ª</text>
+                    </g>
+                    <g class="field-lane lane-b pass-two" id="laneB">
+                      <line class="guide-line" x1="360" y1="72" x2="360" y2="224"></line>
+                      <path class="travel-arrow arrow-up" d="M 360 194 L 360 126 M 346 140 L 360 126 L 374 140"></path>
+                      <path class="travel-arrow arrow-down" d="M 360 126 L 360 194 M 346 180 L 360 194 L 374 180"></path>
+                      <circle class="lane-chip" cx="360" cy="56" r="26"></circle>
+                      <text class="lane-number" id="laneBLabel" x="360" y="64">2ª</text>
+                    </g>
+                    <g class="field-lane lane-c pass-one" id="laneC">
+                      <line class="guide-line" x1="584" y1="72" x2="584" y2="224"></line>
+                      <path class="travel-arrow arrow-up" d="M 584 194 L 584 126 M 570 140 L 584 126 L 598 140"></path>
+                      <path class="travel-arrow arrow-down" d="M 584 126 L 584 194 M 570 180 L 584 194 L 598 180"></path>
+                      <circle class="lane-chip" cx="584" cy="56" r="26"></circle>
+                      <text class="lane-number" id="laneCLabel" x="584" y="64">1ª</text>
+                    </g>
+
+                    <path class="turn-curve" id="turnCurve" d="M 560 102 C 510 72 420 72 378 102" marker-end="url(#turnArrow)"></path>
+
+                    <image class="machine-image" id="machineImage" href="assets/tractor-planter-top.png" x="526" y="112" width="116" height="116" preserveAspectRatio="xMidYMid meet"></image>
+
+                    <g class="gap-measure gap-left">
+                      <line x1="136" y1="278" x2="360" y2="278"></line>
+                      <line x1="136" y1="269" x2="136" y2="287"></line>
+                      <line x1="360" y1="269" x2="360" y2="287"></line>
+                      <rect x="166" y="258" width="164" height="28" rx="14"></rect>
+                      <text id="fieldGapLeft" x="248" y="277">2ª-3ª: 0,000 m</text>
+                    </g>
+                    <g class="gap-measure gap-right">
+                      <line x1="360" y1="278" x2="584" y2="278"></line>
+                      <line x1="360" y1="269" x2="360" y2="287"></line>
+                      <line x1="584" y1="269" x2="584" y2="287"></line>
+                      <rect x="390" y="258" width="164" height="28" rx="14"></rect>
+                      <text id="fieldGapRight" x="472" y="277">1ª-2ª: 0,000 m</text>
+                    </g>
+                  </svg>
+                </div>
+
+              </div>
+
+              <label class="field">
+                <span>Espaçamento Medido Entre a 1ª e a 2ª Passada</span>
+                <div class="input-shell">
+                  <input id="inputMeasured12" inputmode="decimal" enterkeyhint="done" autocomplete="off" aria-label="Espaçamento Medido Entre a Primeira e a Segunda Passada">
+                  <em>m</em>
+                </div>
+              </label>
+
+              <label class="field">
+                <span>Espaçamento Medido Entre a 2ª e a 3ª Passada</span>
+                <div class="input-shell">
+                  <input id="inputMeasured23" inputmode="decimal" enterkeyhint="done" autocomplete="off" aria-label="Espaçamento Medido Entre a Segunda e a Terceira Passada">
+                  <em>m</em>
+                </div>
+              </label>
+            </div>
+
+            <p class="form-error" id="formError" role="alert"></p>
+
+            <div class="action-row">
+              <button class="primary-button" type="button" id="saveButton">
+                <svg><use href="#icon-save"></use></svg>
+                Salvar
+              </button>
+              <button class="secondary-button" type="button" id="copyButton">
+                <svg><use href="#icon-copy"></use></svg>
+                Copiar
+              </button>
+            </div>
+          </section>
+
+          <aside class="card result-card" aria-labelledby="resultsTitle">
+            <div class="card-heading">
+              <p>Preencher no Terminal</p>
+              <h2 id="resultsTitle">Valores Corrigidos</h2>
+            </div>
+
+            <div class="terminal-values">
+              <div class="terminal-value">
+                <span>Largura do Implemento Corrigida</span>
+                <strong id="resultCorrectedWidth">0,000 m</strong>
+              </div>
+              <div class="terminal-value main">
+                <span>Deslocamento Lateral Corrigido</span>
+                <strong id="resultCorrectedOffset">0,000 m</strong>
+              </div>
+            </div>
+
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="historyView">
+        <section class="card history-card" aria-labelledby="historyTitle">
+          <div class="card-heading">
+            <p>Memória Local</p>
+            <h2 id="historyTitle">Histórico</h2>
+          </div>
+          <div class="history-actions">
+            <button class="secondary-button" type="button" id="exportWordButton">
+              <svg><use href="#icon-download"></use></svg>
+              Exportar Word
+            </button>
+            <button class="secondary-button" type="button" id="clearHistoryButton">
+              <svg><use href="#icon-trash"></use></svg>
+              Limpar Histórico
+            </button>
+          </div>
+          <div class="history-list" id="historyList"></div>
+        </section>
+      </section>
+    </main>
+    <div class="toast" id="toastMessage" role="status" aria-live="polite"></div>
+
+    <script src="app.js?v=agres-product49"></script>
+  </body>
+</html>

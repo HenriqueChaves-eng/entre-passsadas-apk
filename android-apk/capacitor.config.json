@@ -1,0 +1,9 @@
+{
+  "appId": "br.com.agres.ajusteentrepassadas",
+  "appName": "Ajuste Entre-Passadas",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  }
+}
