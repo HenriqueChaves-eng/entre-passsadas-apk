@@ -608,6 +608,17 @@ button:disabled {
   transform: translate(-50%, 0);
 }
 
+.android-app .tabs,
+.android-app #historyView,
+.android-app .action-row,
+.android-app .status-pill {
+  display: none;
+}
+
+.android-app .workflow-actions {
+  margin-top: 0;
+}
+
 .history-card {
   min-height: 420px;
 }

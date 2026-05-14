@@ -1,4 +1,4 @@
-const calculationVersion = "Agres Plantio | Ajuste Entre-Passadas v49";
+const calculationVersion = "Agres Plantio | Ajuste Entre-Passadas APK v51";
 
 const defaults = {
   spacing: 0,
@@ -336,6 +336,8 @@ function saveHistory() {
 }
 
 function renderHistory() {
+  if (!outputs.history || !outputs.exportWord) return;
+
   const history = loadHistory();
   const validIds = new Set(history.map((item) => String(item.id)));
   selectedHistoryIds = new Set([...selectedHistoryIds].filter((id) => validIds.has(id)));
@@ -1197,11 +1199,12 @@ function showView(name) {
   document.querySelectorAll(".tab").forEach((button) => {
     button.classList.toggle("active", button.dataset.view === name);
   });
-  document.querySelector("#calculatorView").classList.toggle("active", name === "calculator");
-  document.querySelector("#historyView").classList.toggle("active", name === "history");
+  document.querySelector("#calculatorView")?.classList.toggle("active", name === "calculator");
+  document.querySelector("#historyView")?.classList.toggle("active", name === "history");
 }
 
 function updateConnectionStatus() {
+  if (!outputs.status) return;
   outputs.status.textContent = navigator.onLine ? "Online" : "Offline Pronto";
 }
 
@@ -1245,21 +1248,21 @@ document.querySelectorAll("[data-turn]").forEach((button) => {
 document.querySelector("#newButton").addEventListener("click", startNewCalculation);
 document.querySelector("#secondStageButton").addEventListener("click", startSecondStage);
 
-document.querySelector("#saveButton").addEventListener("click", saveHistory);
-document.querySelector("#copyButton").addEventListener("click", copyResult);
-document.querySelector("#exportWordButton").addEventListener("click", exportHistoryWord);
+document.querySelector("#saveButton")?.addEventListener("click", saveHistory);
+document.querySelector("#copyButton")?.addEventListener("click", copyResult);
+document.querySelector("#exportWordButton")?.addEventListener("click", exportHistoryWord);
 
-document.querySelector("#clearHistoryButton").addEventListener("click", () => {
+document.querySelector("#clearHistoryButton")?.addEventListener("click", () => {
   localStorage.removeItem(storageKeys.history);
   renderHistory();
 });
 
-outputs.history.addEventListener("click", (event) => {
+outputs.history?.addEventListener("click", (event) => {
   const item = event.target.closest("[data-restore-id]");
   if (item) restoreHistory(item.dataset.restoreId);
 });
 
-outputs.history.addEventListener("change", (event) => {
+outputs.history?.addEventListener("change", (event) => {
   const checkbox = event.target.closest("[data-export-id]");
   if (!checkbox) return;
 
