@@ -1,4 +1,4 @@
-const CACHE_NAME = "agres-espacamento-apk-v51";
+const CACHE_NAME = "agres-espacamento-apk-v55";
 const INDEX_URL = "./index.html";
 const APP_ASSETS = [
   "./",
@@ -9,6 +9,14 @@ const APP_ASSETS = [
   "./service-worker.js",
   "./assets/agres-brand.jpeg",
   "./assets/agres-report-logo.jpg",
+  "./assets/agres-app-icon.png",
+  "./assets/agres-app-icon-foreground.png",
+  "./assets/agres-tractor-planter-icon.png",
+  "./assets/agres-tractor-planter-icon-foreground.png",
+  "./assets/agres-gray-planter-icon.png",
+  "./assets/agres-gray-planter-icon-foreground.png",
+  "./assets/agres-gray-green-plants-icon.png",
+  "./assets/agres-gray-green-plants-icon-foreground.png",
   "./assets/logo_agres.png",
   "./assets/tractor-planter-top.png"
 ];

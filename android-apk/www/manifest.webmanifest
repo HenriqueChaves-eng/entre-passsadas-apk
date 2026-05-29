@@ -10,7 +10,7 @@
   "theme_color": "#f4f5f6",
   "icons": [
     {
-      "src": "assets/logo_agres.png",
+      "src": "assets/agres-gray-green-plants-icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

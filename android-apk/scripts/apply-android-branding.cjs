@@ -3,8 +3,11 @@ const path = require("path");
 
 const root = path.resolve(__dirname, "..");
 const androidRoot = path.join(root, "android");
-const sourceIcon = path.join(root, "www", "assets", "logo_agres.png");
+const sourceIcon = path.join(root, "www", "assets", "agres-gray-green-plants-icon.png");
+const sourceForeground = path.join(root, "www", "assets", "agres-gray-green-plants-icon-foreground.png");
 const resRoot = path.join(androidRoot, "app", "src", "main", "res");
+const drawableRoot = path.join(resRoot, "drawable");
+const adaptiveIconRoot = path.join(resRoot, "mipmap-anydpi-v26");
 const valuesRoot = path.join(resRoot, "values");
 const stringsPath = path.join(valuesRoot, "strings.xml");
 const colorsPath = path.join(valuesRoot, "colors.xml");
@@ -21,20 +24,40 @@ if (!fs.existsSync(sourceIcon)) {
   throw new Error(`Icone nao encontrado: ${sourceIcon}`);
 }
 
+if (!fs.existsSync(sourceForeground)) {
+  throw new Error(`Icone foreground nao encontrado: ${sourceForeground}`);
+}
+
+for (const dir of fs.readdirSync(resRoot, { withFileTypes: true })) {
+  if (!dir.isDirectory() || !dir.name.startsWith("drawable")) continue;
+
+  const dirPath = path.join(resRoot, dir.name);
+  for (const file of fs.readdirSync(dirPath)) {
+    if (/^ic_launcher_foreground\./.test(file)) {
+      fs.unlinkSync(path.join(dirPath, file));
+    }
+  }
+}
+
+fs.mkdirSync(drawableRoot, { recursive: true });
+fs.copyFileSync(sourceForeground, path.join(drawableRoot, "ic_launcher_foreground.png"));
+
 for (const dir of mipmapDirs) {
   const targetDir = path.join(resRoot, dir);
   fs.mkdirSync(targetDir, { recursive: true });
 
   for (const file of [
     "ic_launcher.png",
-    "ic_launcher_round.png",
-    "ic_launcher_foreground.png"
+    "ic_launcher_round.png"
   ]) {
     fs.copyFileSync(sourceIcon, path.join(targetDir, file));
   }
+
+  fs.copyFileSync(sourceForeground, path.join(targetDir, "ic_launcher_foreground.png"));
 }
 
 fs.mkdirSync(valuesRoot, { recursive: true });
+fs.mkdirSync(adaptiveIconRoot, { recursive: true });
 
 if (fs.existsSync(stringsPath)) {
   const strings = fs.readFileSync(stringsPath, "utf8")
@@ -53,5 +76,15 @@ if (fs.existsSync(colorsPath)) {
 } else {
   fs.writeFileSync(colorsPath, `<resources>\n    <color name="ic_launcher_background">${backgroundColor}</color>\n</resources>\n`);
 }
+
+const adaptiveIconXml = `<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/ic_launcher_background"/>
+    <foreground android:drawable="@drawable/ic_launcher_foreground"/>
+</adaptive-icon>
+`;
+
+fs.writeFileSync(path.join(adaptiveIconRoot, "ic_launcher.xml"), adaptiveIconXml);
+fs.writeFileSync(path.join(adaptiveIconRoot, "ic_launcher_round.xml"), adaptiveIconXml);
 
 console.log("Icone e nome do app Android aplicados.");
