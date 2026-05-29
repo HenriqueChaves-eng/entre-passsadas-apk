@@ -15,6 +15,7 @@
     "@capacitor/share": "latest"
   },
   "devDependencies": {
+    "@capacitor/assets": "latest",
     "@capacitor/cli": "latest"
   }
 }

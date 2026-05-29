@@ -11,6 +11,7 @@ const adaptiveIconRoot = path.join(resRoot, "mipmap-anydpi-v26");
 const valuesRoot = path.join(resRoot, "values");
 const stringsPath = path.join(valuesRoot, "strings.xml");
 const colorsPath = path.join(valuesRoot, "colors.xml");
+const manifestPath = path.join(androidRoot, "app", "src", "main", "AndroidManifest.xml");
 
 const mipmapDirs = [
   "mipmap-mdpi",
@@ -64,6 +65,20 @@ if (fs.existsSync(stringsPath)) {
     .replace(/<string name="app_name">.*?<\/string>/, '<string name="app_name">Ajuste Entre-Passadas</string>')
     .replace(/<string name="title_activity_main">.*?<\/string>/, '<string name="title_activity_main">Ajuste Entre-Passadas</string>');
   fs.writeFileSync(stringsPath, strings);
+}
+
+if (fs.existsSync(manifestPath)) {
+  let manifest = fs.readFileSync(manifestPath, "utf8");
+  manifest = manifest.replace(
+    /<application\b([^>]*)>/,
+    (match, attrs) => {
+      let nextAttrs = attrs
+        .replace(/\sandroid:icon="[^"]*"/, "")
+        .replace(/\sandroid:roundIcon="[^"]*"/, "");
+      return `<application${nextAttrs} android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round">`;
+    }
+  );
+  fs.writeFileSync(manifestPath, manifest);
 }
 
 const backgroundColor = "#F4F5F6";

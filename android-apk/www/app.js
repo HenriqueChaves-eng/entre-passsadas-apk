@@ -1,4 +1,4 @@
-const calculationVersion = "Agres Plantio | Ajuste Entre-Passadas APK v55";
+const calculationVersion = "Agres Plantio | Ajuste Entre-Passadas APK v56";
 
 const defaults = {
   spacing: 0,
