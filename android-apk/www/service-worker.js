@@ -1,4 +1,4 @@
-const CACHE_NAME = "agres-espacamento-apk-v56";
+const CACHE_NAME = "agres-espacamento-apk-v57";
 const INDEX_URL = "./index.html";
 const APP_ASSETS = [
   "./",

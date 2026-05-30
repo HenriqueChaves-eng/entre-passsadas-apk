@@ -42,6 +42,7 @@ for (const dir of fs.readdirSync(resRoot, { withFileTypes: true })) {
 
 fs.mkdirSync(drawableRoot, { recursive: true });
 fs.copyFileSync(sourceForeground, path.join(drawableRoot, "ic_launcher_foreground.png"));
+fs.copyFileSync(sourceForeground, path.join(drawableRoot, "agres_launcher_foreground.png"));
 
 for (const dir of mipmapDirs) {
   const targetDir = path.join(resRoot, dir);
@@ -55,6 +56,9 @@ for (const dir of mipmapDirs) {
   }
 
   fs.copyFileSync(sourceForeground, path.join(targetDir, "ic_launcher_foreground.png"));
+  fs.copyFileSync(sourceIcon, path.join(targetDir, "agres_launcher.png"));
+  fs.copyFileSync(sourceIcon, path.join(targetDir, "agres_launcher_round.png"));
+  fs.copyFileSync(sourceForeground, path.join(targetDir, "agres_launcher_foreground.png"));
 }
 
 fs.mkdirSync(valuesRoot, { recursive: true });
@@ -69,16 +73,27 @@ if (fs.existsSync(stringsPath)) {
 
 if (fs.existsSync(manifestPath)) {
   let manifest = fs.readFileSync(manifestPath, "utf8");
+  if (!/<application\b/.test(manifest)) {
+    throw new Error("AndroidManifest.xml sem tag <application>.");
+  }
+
   manifest = manifest.replace(
     /<application\b([^>]*)>/,
     (match, attrs) => {
       let nextAttrs = attrs
         .replace(/\sandroid:icon="[^"]*"/, "")
         .replace(/\sandroid:roundIcon="[^"]*"/, "");
-      return `<application${nextAttrs} android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round">`;
+      return `<application${nextAttrs} android:icon="@mipmap/agres_launcher" android:roundIcon="@mipmap/agres_launcher_round">`;
     }
   );
+
+  if (!manifest.includes('android:icon="@mipmap/agres_launcher"')) {
+    throw new Error("Falha ao aplicar android:icon da Agres.");
+  }
+
   fs.writeFileSync(manifestPath, manifest);
+} else {
+  throw new Error(`AndroidManifest.xml nao encontrado: ${manifestPath}`);
 }
 
 const backgroundColor = "#F4F5F6";
@@ -102,4 +117,14 @@ const adaptiveIconXml = `<?xml version="1.0" encoding="utf-8"?>
 fs.writeFileSync(path.join(adaptiveIconRoot, "ic_launcher.xml"), adaptiveIconXml);
 fs.writeFileSync(path.join(adaptiveIconRoot, "ic_launcher_round.xml"), adaptiveIconXml);
 
-console.log("Icone e nome do app Android aplicados.");
+const agresAdaptiveIconXml = `<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/ic_launcher_background"/>
+    <foreground android:drawable="@drawable/agres_launcher_foreground"/>
+</adaptive-icon>
+`;
+
+fs.writeFileSync(path.join(adaptiveIconRoot, "agres_launcher.xml"), agresAdaptiveIconXml);
+fs.writeFileSync(path.join(adaptiveIconRoot, "agres_launcher_round.xml"), agresAdaptiveIconXml);
+
+console.log("Icone e nome do app Android aplicados em @mipmap/agres_launcher.");
