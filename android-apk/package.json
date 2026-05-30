@@ -4,9 +4,11 @@
   "private": true,
   "description": "APK Android do app Agres Ajuste de Espacamento Entre-Passadas.",
   "scripts": {
+    "postinstall": "node scripts/prepare-capacitor-template.cjs",
     "android:add": "cap add android",
     "android:sync": "cap sync android",
-    "android:open": "cap open android"
+    "android:open": "cap open android",
+    "capacitor:sync:after": "node scripts/apply-android-branding.cjs"
   },
   "dependencies": {
     "@capacitor/android": "latest",
