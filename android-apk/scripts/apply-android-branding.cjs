@@ -11,6 +11,7 @@ const adaptiveIconRoot = path.join(resRoot, "mipmap-anydpi-v26");
 const valuesRoot = path.join(resRoot, "values");
 const stringsPath = path.join(valuesRoot, "strings.xml");
 const colorsPath = path.join(valuesRoot, "colors.xml");
+const launcherBackgroundPath = path.join(valuesRoot, "ic_launcher_background.xml");
 const manifestPath = path.join(androidRoot, "app", "src", "main", "AndroidManifest.xml");
 
 const mipmapDirs = [
@@ -97,14 +98,15 @@ if (fs.existsSync(manifestPath)) {
 }
 
 const backgroundColor = "#F4F5F6";
+fs.writeFileSync(
+  launcherBackgroundPath,
+  `<resources>\n    <color name="ic_launcher_background">${backgroundColor}</color>\n</resources>\n`
+);
+
 if (fs.existsSync(colorsPath)) {
   const colors = fs.readFileSync(colorsPath, "utf8");
-  const next = colors.includes('name="ic_launcher_background"')
-    ? colors.replace(/<color name="ic_launcher_background">.*?<\/color>/, `<color name="ic_launcher_background">${backgroundColor}</color>`)
-    : colors.replace("</resources>", `    <color name="ic_launcher_background">${backgroundColor}</color>\n</resources>`);
+  const next = colors.replace(/\s*<color name="ic_launcher_background">.*?<\/color>/g, "");
   fs.writeFileSync(colorsPath, next);
-} else {
-  fs.writeFileSync(colorsPath, `<resources>\n    <color name="ic_launcher_background">${backgroundColor}</color>\n</resources>\n`);
 }
 
 const adaptiveIconXml = `<?xml version="1.0" encoding="utf-8"?>
