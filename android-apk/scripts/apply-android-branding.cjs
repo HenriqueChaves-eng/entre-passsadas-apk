@@ -67,8 +67,8 @@ fs.mkdirSync(adaptiveIconRoot, { recursive: true });
 
 if (fs.existsSync(stringsPath)) {
   const strings = fs.readFileSync(stringsPath, "utf8")
-    .replace(/<string name="app_name">.*?<\/string>/, '<string name="app_name">Ajuste Entre-Passadas</string>')
-    .replace(/<string name="title_activity_main">.*?<\/string>/, '<string name="title_activity_main">Ajuste Entre-Passadas</string>');
+    .replace(/<string name="app_name">.*?<\/string>/, '<string name="app_name">Agres Entre-Passadas</string>')
+    .replace(/<string name="title_activity_main">.*?<\/string>/, '<string name="title_activity_main">Agres Entre-Passadas</string>');
   fs.writeFileSync(stringsPath, strings);
 }
 

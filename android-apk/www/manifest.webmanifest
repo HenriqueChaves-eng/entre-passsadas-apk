@@ -1,6 +1,6 @@
 {
-  "name": "Ajuste de Espaçamento Entre-Passadas",
-  "short_name": "Entre-Passadas",
+  "name": "Agres Entre-Passadas",
+  "short_name": "Agres Entre-Passadas",
   "description": "Ajuste Offline de Espaçamento Entre-Passadas da Plantadeira.",
   "start_url": "./index.html",
   "scope": "./",
