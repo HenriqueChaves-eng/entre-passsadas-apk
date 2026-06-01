@@ -1,4 +1,4 @@
-const calculationVersion = "Agres Plantio | Ajuste Entre-Passadas APK v57";
+const calculationVersion = "Agres Plantio | Ajuste Entre-Passadas APK v58";
 
 const defaults = {
   spacing: 0,
@@ -74,6 +74,14 @@ function formatMeters(value, digits = 3) {
 function formatSignedMeters(value, digits = 3) {
   if (Object.is(value, -0)) return formatMeters(0, digits);
   return formatMeters(value, digits);
+}
+
+function terminalWidth(value) {
+  return roundLikeExcel(value, 2);
+}
+
+function formatTerminalWidth(value) {
+  return formatMeters(terminalWidth(value), 2);
 }
 
 function roundTo(value, digits) {
@@ -283,7 +291,7 @@ function render() {
     || !Number.isFinite(latest.correctedOffset);
 
   outputs.implementWidth.textContent = formatMeters(latest.implementWidth, 2);
-  outputs.correctedWidth.textContent = formatMeters(latest.correctedWidth, 3);
+  outputs.correctedWidth.textContent = formatTerminalWidth(latest.correctedWidth);
   outputs.correctedOffset.textContent = formatSignedMeters(latest.correctedOffset);
   const turnRight = state.turn === "right";
   const measured12Text = `1ª-2ª: ${formatMeters(state.measured12, 2)}`;
@@ -364,7 +372,7 @@ function renderHistory() {
         <span>${item.date} | ${item.values.rows || 0} Linhas | Virada ${item.values.turn === "right" ? "Direita" : "Esquerda"} | 1ª-2ª ${formatMeters(item.values.measured12, 2)}</span>
       </span>
       <span>
-        <strong>${formatMeters(item.result.correctedWidth, 3)}</strong>
+        <strong>${formatTerminalWidth(item.result.correctedWidth)}</strong>
         <span>${formatSignedMeters(item.result.correctedOffset)}</span>
       </span>
       </button>
@@ -403,7 +411,7 @@ function startSecondStage() {
 
   latest = calculate(state);
   const rows = Math.max(0, Math.round(state.rows || 0));
-  const correctedWidth = roundTo(latest.correctedWidth, 3);
+  const correctedWidth = terminalWidth(latest.correctedWidth);
   const firstPass = firstPassInfo(state, latest);
   const referenceSpacing = Math.max(0, firstPass.spacing || state.spacing || 0);
 
@@ -435,7 +443,7 @@ function resultText() {
     `Virada Entre a 1ª e a 2ª Passada: ${state.turn === "right" ? "Direita" : "Esquerda"}`,
     `Espaçamento Medido Entre a 1ª e a 2ª Passada: ${formatMeters(state.measured12, 2)}`,
     `Espaçamento Medido Entre a 2ª e a 3ª Passada: ${formatMeters(state.measured23, 2)}`,
-    `2Âª Passada - Largura Final Corrigida: ${formatMeters(latest.correctedWidth, 3)}`,
+    `2Âª Passada - Largura Final Corrigida: ${formatTerminalWidth(latest.correctedWidth)}`,
     `Deslocamento Lateral Corrigido: ${formatSignedMeters(latest.correctedOffset)}`
   ].join("\n");
 }
@@ -488,7 +496,7 @@ function historyRows(item) {
     ["Virada Entre a 1ª e a 2ª Passada", values.turn === "right" ? "Direita" : "Esquerda"],
     ["Espaçamento Medido Entre a 1ª e a 2ª Passada", formatMeters(values.measured12, 2)],
     ["Espaçamento Medido Entre a 2ª e a 3ª Passada", formatMeters(values.measured23, 2)],
-    ["Largura do Implemento Corrigido", formatMeters(result.correctedWidth, 3)],
+    ["Largura do Implemento Corrigido", formatTerminalWidth(result.correctedWidth)],
     ["Deslocamento Lateral Corrigido", formatSignedMeters(result.correctedOffset)]
   ];
 }
@@ -625,10 +633,10 @@ function comparisonRows(history) {
   return [
     ["1ª Passada - Largura Original", formatMeters(first.result.implementWidth, 2)],
     ["1ª Passada - Deslocamento Original", formatSignedMeters(first.values.initialOffset)],
-    ["Ajuste Encontrado na 1ª Passada", `${formatMeters(first.result.correctedWidth, 3)} / ${formatSignedMeters(first.result.correctedOffset)}`],
+    ["Ajuste Encontrado na 1ª Passada", `${formatTerminalWidth(first.result.correctedWidth)} / ${formatSignedMeters(first.result.correctedOffset)}`],
     ["2ª Passada - Largura Aplicada", formatMeters(second.result.implementWidth, 2)],
     ["2ª Passada - Deslocamento Aplicado", formatSignedMeters(second.values.initialOffset)],
-    ["Resultado Final da 2ª Passada", `${formatMeters(second.result.correctedWidth, 3)} / ${formatSignedMeters(second.result.correctedOffset)}`]
+    ["Resultado Final da 2ª Passada", `${formatTerminalWidth(second.result.correctedWidth)} / ${formatSignedMeters(second.result.correctedOffset)}`]
   ];
 }
 
@@ -751,7 +759,7 @@ function reportTerminalHighlight(item) {
     <w:tr>${reportCellText("PREENCHER NO TERMINAL", { bold: true, size: 22, align: "center", color: "FFFFFF", shading: "595959", gridSpan: 2, width: 9360 })}</w:tr>
     <w:tr>
       ${reportCellText("Largura do Implemento Corrigida", { bold: true, size: 22, width: 4680, shading: "F2F2F2" })}
-      ${reportCellText(formatMeters(result.correctedWidth, 3), { bold: true, size: 28, align: "center", width: 4680 })}
+      ${reportCellText(formatTerminalWidth(result.correctedWidth), { bold: true, size: 28, align: "center", width: 4680 })}
     </w:tr>
     <w:tr>
       ${reportCellText("Deslocamento Lateral Corrigido", { bold: true, size: 22, width: 4680, shading: "F2F2F2" })}
@@ -781,7 +789,7 @@ function historyRows(item) {
     ["Virada Entre a 1ª e a 2ª Passada", values.turn === "right" ? "Direita" : "Esquerda"],
     ["Espaçamento Medido Entre a 1ª e a 2ª Passada", formatMeters(values.measured12, 2)],
     ["Espaçamento Medido Entre a 2ª e a 3ª Passada", formatMeters(values.measured23, 2)],
-    ["2ª Passada - Largura Final Corrigida", formatMeters(result.correctedWidth, 3)],
+    ["2ª Passada - Largura Final Corrigida", formatTerminalWidth(result.correctedWidth)],
     ["Deslocamento Lateral Corrigido", formatSignedMeters(result.correctedOffset)]
   ];
 }
@@ -795,9 +803,9 @@ function comparisonRows(history) {
 
   return [
     ["1ª Passada", formatMeters(firstPass.width, 2), formatSignedMeters(first.values.initialOffset), firstPassFormulaText(firstPass)],
-    ["Correção Calculada", formatMeters(first.result.correctedWidth, 3), formatSignedMeters(first.result.correctedOffset), "Valores transferidos para a 2ª passada"],
-    ["2ª Passada", formatMeters(second.result.implementWidth, 3), formatSignedMeters(second.values.initialOffset), "Valores aplicados no terminal"],
-    ["Resultado Final", formatMeters(second.result.correctedWidth, 3), formatSignedMeters(second.result.correctedOffset), "Ajuste final corrigido"]
+    ["Correção Calculada", formatTerminalWidth(first.result.correctedWidth), formatSignedMeters(first.result.correctedOffset), "Valores transferidos para a 2ª passada"],
+    ["2ª Passada", formatTerminalWidth(second.result.implementWidth), formatSignedMeters(second.values.initialOffset), "Valores aplicados no terminal"],
+    ["Resultado Final", formatTerminalWidth(second.result.correctedWidth), formatSignedMeters(second.result.correctedOffset), "Ajuste final corrigido"]
   ];
 }
 
@@ -837,7 +845,7 @@ function firstPassMeasurementRows(item) {
     ["Virada Entre a 1ª e a 2ª Passada", values.turn === "right" ? "Direita" : "Esquerda"],
     ["Medição Entre 1ª e 2ª Passada", formatMeters(values.measured12, 2)],
     ["Medição Entre 2ª e 3ª Passada", formatMeters(values.measured23, 2)],
-    ["Largura Calculada Para Aplicar na 2ª Passada", formatMeters(result.correctedWidth, 3)],
+    ["Largura Calculada Para Aplicar na 2ª Passada", formatTerminalWidth(result.correctedWidth)],
     ["Deslocamento Calculado Para Aplicar na 2ª Passada", formatSignedMeters(result.correctedOffset)]
   ];
 }
@@ -848,7 +856,7 @@ function secondPassAppliedRows(item) {
   return [
     ["Registro", item.name || item.date || "2ª Passada"],
     ["Data", item.date || ""],
-    ["Largura Final Aplicada no Terminal", formatMeters(result.implementWidth, 3)],
+    ["Largura Final Aplicada no Terminal", formatTerminalWidth(result.implementWidth)],
     ["Deslocamento Final Aplicado no Terminal", formatSignedMeters(values.initialOffset)],
     ["Espaçamento Entre Linhas Resultante", formatMeters(values.spacing, 2)],
     ["Quantidade de Linhas", String(values.rows || 0)]
@@ -862,7 +870,7 @@ function secondPassCheckRows(item) {
     ["Virada Entre a 1ª e a 2ª Passada", values.turn === "right" ? "Direita" : "Esquerda"],
     ["Medição Entre 1ª e 2ª Passada", formatMeters(values.measured12, 2)],
     ["Medição Entre 2ª e 3ª Passada", formatMeters(values.measured23, 2)],
-    ["Largura Conferida Após a 2ª Passada", formatMeters(result.correctedWidth, 3)],
+    ["Largura Conferida Após a 2ª Passada", formatTerminalWidth(result.correctedWidth)],
     ["Deslocamento Conferido Após a 2ª Passada", formatSignedMeters(result.correctedOffset)]
   ];
 }
@@ -874,9 +882,9 @@ function finalResultRows(firstItem, secondItem) {
 
   return [
     ["Largura Original da 1ª Passada", firstPassFormulaText(original)],
-    ["Correção Calculada Após a 1ª Passada", `${formatMeters(first.result.correctedWidth, 3)} / ${formatSignedMeters(first.result.correctedOffset)}`],
-    ["Valores Aplicados na 2ª Passada", `${formatMeters(second.result.implementWidth, 3)} / ${formatSignedMeters(second.values.initialOffset)}`],
-    ["Resultado Final Corrigido", `${formatMeters(second.result.correctedWidth, 3)} / ${formatSignedMeters(second.result.correctedOffset)}`]
+    ["Correção Calculada Após a 1ª Passada", `${formatTerminalWidth(first.result.correctedWidth)} / ${formatSignedMeters(first.result.correctedOffset)}`],
+    ["Valores Aplicados na 2ª Passada", `${formatTerminalWidth(second.result.implementWidth)} / ${formatSignedMeters(second.values.initialOffset)}`],
+    ["Resultado Final Corrigido", `${formatTerminalWidth(second.result.correctedWidth)} / ${formatSignedMeters(second.result.correctedOffset)}`]
   ];
 }
 
