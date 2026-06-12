@@ -35,7 +35,7 @@ for (const dir of fs.readdirSync(resRoot, { withFileTypes: true })) {
 
   const dirPath = path.join(resRoot, dir.name);
   for (const file of fs.readdirSync(dirPath)) {
-    if (/^ic_launcher_foreground\./.test(file)) {
+    if (/^(?:ic_launcher|agres_launcher)_foreground\./.test(file)) {
       fs.unlinkSync(path.join(dirPath, file));
     }
   }
